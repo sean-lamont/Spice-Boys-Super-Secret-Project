@@ -3,12 +3,6 @@ import React, { Component } from 'react';
 /// / ES6
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 
-// ES5
-//var ReactMapboxGl = require("react-mapbox-gl");
-//var Layer = ReactMapboxGl.Layer;
-//var Feature = ReactMapboxGl.Feature;
-
-
 export default class Map extends Component {
 
     render() {
