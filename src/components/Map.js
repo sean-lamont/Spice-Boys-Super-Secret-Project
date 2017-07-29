@@ -26,7 +26,7 @@ class Map extends Component {
     componentDidMount() {
         window.addEventListener('resize', this._resize);
         this._resize();
-        
+
         requestJson(document.location.href + '/data/ACT Division Boundaries.geojson', (error, response) => {
             if (!error) {
                 this._loadData(response);
@@ -39,12 +39,23 @@ class Map extends Component {
         //updatePercentiles(data, f => f.properties.income[this.state.year]);
         const mapStyle = defaultMapStyle
         // Add geojson source to map
-            .setIn(['sources', 'incomeByState'], fromJS({type: 'geojson', data}))
+            .setIn(['sources', 'suburbs'], fromJS({type: 'geojson', data}))
             // Add point layer to map
             .set('layers', defaultMapStyle.get('layers').push(dataLayer));
 
         this.setState({data, mapStyle});
     };
+
+    updatePercentiles = (featureCollection, accessor) => {
+        const {features} = featureCollection;
+        const scale = scaleQuantile().domain(features.map(accessor)).range(range(9));
+        features.forEach(f => {
+            const value = accessor(f);
+            f.properties.value = value;
+            f.properties.percentile = scale(value);
+        });
+    };
+
 
 
     _resize = () => {
