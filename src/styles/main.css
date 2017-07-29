@@ -9,3 +9,8 @@ input {
   padding: 10px;
   outline: none;
 }
+.search {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
