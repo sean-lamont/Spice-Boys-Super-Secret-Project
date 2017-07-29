@@ -12,6 +12,7 @@ body {
   position: relative;
   height: 100vh;
   width: 33.33%;
+  float: left;
 }
 .search {
   position: absolute;
@@ -20,7 +21,7 @@ body {
 }
 .search input {
   width: 100%;
-  border-top: 1px solid #eee;
+  border: 1px solid #eee;
   padding: 10px;
   outline: none;
 }
@@ -28,4 +29,9 @@ body {
 .map {
   height: 100vh;
   width: 66.67%;
+  float: right;
+}
+.map > div {
+  width: 100%;
+  height: 100%;
 }

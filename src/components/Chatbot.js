@@ -19,7 +19,7 @@ class Chatbot extends Component {
               text={text}
               bot={false}
             />
-          }.bind(this))
+          })
         }
         <div className="search">
           <input type="text" onKeyDown={this.handleKeyPress.bind(this)} />
