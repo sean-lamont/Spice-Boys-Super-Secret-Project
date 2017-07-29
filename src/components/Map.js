@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 //import {render} from 'react-dom';
 import MapGL from 'react-map-gl';
 import Overlay from './Overlay.js';
-import Dimensions from 'react-dimensions'
+//import { getSuburbName } from '../geojson.js';
+//import Dimensions from 'react-dimensions'
 
 import {json as requestJson} from 'd3-request';
 
@@ -29,6 +30,48 @@ const defaultViewport =  {
 
 class Map extends Component {
 
+
+    // Displays a GeoJSON polygonal file
+    showGeoJSON(suburbs) {
+        this.setState({data: suburbs});
+    }
+
+    showAllSuburbs() {
+        this.showGeoJSON(this.state.suburbs);
+    }
+
+    hideSuburbs() {
+        this.setState({data: null});
+    }
+
+    // Takes a dictionary, {"SUBURB": height} - heights should be in the hundreds
+    setHeights(heights) {
+        this.setState({heights: heights});
+    }
+
+    setColours(colours) {
+        this.setState({colours: colours});
+    }
+
+    getSuburbName(suburb) {
+        return suburb.properties.division_name;
+    }
+
+    setHeightsByName() {
+        var heights = {};
+        var suburbs = this.state.suburbs['features'];
+        for(var i=0; i<suburbs.length; i++) {
+            var name = this.getSuburbName(suburbs[i]);
+            heights[name] = name.length * 100;
+        }
+        this.setHeights(heights);
+        //console.log(heights);
+    }
+
+
+
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -37,17 +80,20 @@ class Map extends Component {
             },
             data: null
         };
-
-        requestJson(DATA_URL, (error, response) => {
-            if (!error) {
-                this.setState({data: response});
-            }
-        });
     }
 
     componentDidMount() {
         window.addEventListener('resize', this._resize.bind(this));
         this._resize();
+
+        requestJson(DATA_URL, (error, response) => {
+            if (!error) {
+                this.setState({suburbs: response});
+                this.setHeightsByName();
+                this.showAllSuburbs();
+            }
+        });
+
     }
 
     _resize() {
@@ -64,7 +110,16 @@ class Map extends Component {
     }
 
     render() {
-        const {viewport, data} = this.state;
+        const {viewport, data, heights, colours} = this.state;
+        console.log("xxx");
+        console.log(data);
+        console.log(heights);
+        const overlay = <Overlay viewport={viewport}
+                                 data={data}
+                                 colorScale={colorScale}
+                                 heights={heights}
+                                 colours={colours}
+        />;
         return (
             <div className="map" ref="mapBox">
                 <MapGL
@@ -72,10 +127,7 @@ class Map extends Component {
                     onViewportChange={this._onViewportChange.bind(this)}
                     mapboxApiAccessToken={MAPBOX_TOKEN}
                 >
-                    <Overlay viewport={viewport}
-                                   data={data}
-                                   colorScale={colorScale}
-                                   />
+                    {overlay}
                 </MapGL>
             </div>
         );

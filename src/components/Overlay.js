@@ -20,6 +20,15 @@ export default class Overlay extends Component {
         });
     }
 
+    getHeight(name) {
+        const heights = this.props.heights;
+        console.log(heights);
+        if (heights && heights.indexOf(name) !== -1) {
+            return this.heights[name];
+        }
+        return 0;
+    }
+
     render() {
         const {viewport, data, colorScale} = this.props;
 
@@ -27,7 +36,7 @@ export default class Overlay extends Component {
             return null;
         }
 
-        const layer = new GeoJsonLayer({
+        var layer = new GeoJsonLayer({
             id: 'geojson',
             data,
             opacity: 0.8,
@@ -36,7 +45,7 @@ export default class Overlay extends Component {
             extruded: true,
             wireframe: true,
             fp64: true,
-            getElevation: f => f.properties.division_name.length * 100,
+            getElevation: f => this.props.heights ? this.props.heights[f.properties.division_name] : 1,
             getFillColor: f => colorScale(f.properties.division_name.length/10),
             getLineColor: f => [255, 255, 255],
             lightSettings: LIGHT_SETTINGS,
