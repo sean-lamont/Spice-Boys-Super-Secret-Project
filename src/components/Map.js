@@ -17,22 +17,25 @@ class Map extends Component {
 	}
 
   render() {
+		const {viewport} = this.state;
     return (
 			<div ref="mapBox" className="map">
 				<MapGL
 					width={this.state.width}
 					height={this.state.height}
-					latitude={37.7577}
-					longitude={-122.4376}
+					latitude={-35.5202253}
+					longitude={148.5205264}
 					zoom={8}
 					mapboxApiAccessToken={'pk.eyJ1IjoiYWNlb2ZzcGllcyIsImEiOiJjajVvaDg0d2Q0MXJhMnFvODUzNjQ3MmZ5In0.xLzbJqDG59zkyw2CKEXaow'}
-					onChangeViewport={viewport => {
-						// Call `setState` and use the state to update the map.
-					}}
+					mapStyle="mapbox://styles/mapbox/satellite-v9"
+					onViewportChange={this.onViewportChange}
+					{...viewport}
 				/>
 			</div>
     );
   }
+
+	onViewportChange = viewport => this.setState({ viewport });
 }
 
 export default Map;
