@@ -15,13 +15,25 @@ const DATA_URL = 'https://raw.githubusercontent.com/Spice-Boys/Spice-Boys-Super-
 
 const colorScale = r => [140, r * 255, 200 * (1 - r)];
 
+const defaultViewport =  {
+        latitude: -35.3,
+        longitude: 149.1,
+        zoom: 10,
+        maxZoom: 16,
+        pitch: 45,
+        bearing: 0,
+        height: 500,
+        width: 500,
+        mapStyle: "mapbox://styles/mapbox/outdoors-v9",
+};
+
 class Map extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             viewport: {
-                ...Overlay.defaultViewport,
+                ...defaultViewport,
             },
             data: null
         };

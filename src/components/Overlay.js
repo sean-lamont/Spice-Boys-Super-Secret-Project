@@ -13,20 +13,6 @@ const LIGHT_SETTINGS = {
 
 export default class Overlay extends Component {
 
-    static get defaultViewport() {
-        return {
-            latitude: -35.3,
-            longitude: 149.1,
-            zoom: 10,
-            maxZoom: 16,
-            pitch: 45,
-            bearing: 0,
-            height: 500,
-            width: 500,
-            mapStyle: "mapbox://styles/mapbox/outdoors-v9",
-        };
-    }
-
     _initialize(gl) {
         setParameters(gl, {
             depthTest: true,
