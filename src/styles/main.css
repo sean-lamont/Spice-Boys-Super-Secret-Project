@@ -20,7 +20,7 @@ body {
 }
 .search input {
   width: 100%;
-  border: 1px solid #eee;
+  border-top: 1px solid #eee;
   padding: 10px;
   outline: none;
 }
