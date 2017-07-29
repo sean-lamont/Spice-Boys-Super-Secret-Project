@@ -5,26 +5,18 @@ class Chatbot extends Component {
   constructor (props) {
     super(props);
     this.state = {
-			query: [],
-      tips: true
+			query: []
 		};
-  }
-
-  componentDidUpdate() {
-    if (this.state.query.length > 0 && this.state.tips) {
-      this.setState({ tips: false });
-    }
   }
 
   render() {
     return (
       <div className="chatbot">
-        {this.state.tips &&
-          <div className="tips">
-            Welcome to blah
-          </div>
-        }
         <div className="messages">
+          <Message
+            text="Hi! My name's ____. I'm here to help you with blah blah blah!"
+            bot={true}
+          />
           {this.state.query.length > 0 &&
             this.state.query.map(function(text, index) {
               return <Message

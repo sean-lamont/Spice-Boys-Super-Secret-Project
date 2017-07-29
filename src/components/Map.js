@@ -2,12 +2,26 @@ import React, { Component } from 'react';
 import MapGL from 'react-map-gl';
 
 class Map extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			height: 400,
+			width: 400
+		}
+	}
+
+	componentDidMount() {
+		const height = this.refs.mapBox.clientHeight;
+		const width = this.refs.mapBox.clientWidth;
+		this.setState({ height, width });
+	}
+
   render() {
     return (
-			<div className="map">
+			<div ref="mapBox" className="map">
 				<MapGL
-					width={400}
-					height={400}
+					width={this.state.width}
+					height={this.state.height}
 					latitude={37.7577}
 					longitude={-122.4376}
 					zoom={8}
