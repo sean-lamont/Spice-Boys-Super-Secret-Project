@@ -10,11 +10,17 @@ class Map extends Component {
 		}
 	}
 
-	componentDidMount() {
-		const height = this.refs.mapBox.clientHeight;
-		const width = this.refs.mapBox.clientWidth;
-		this.setState({ height, width });
-	}
+    componentDidMount() {
+        window.addEventListener('resize', this._resize);
+        this._resize();
+    }
+
+    _resize = () => {
+        this.setState({
+                width: this.refs.mapBox.clientWidth,
+                height: this.refs.mapBox.clientHeight
+        });
+    };
 
   render() {
 		const {viewport} = this.state;
@@ -23,11 +29,11 @@ class Map extends Component {
 				<MapGL
 					width={this.state.width}
 					height={this.state.height}
-					latitude={-35.5202253}
-					longitude={148.5205264}
-					zoom={8}
+					latitude={-35.3}
+					longitude={149.1}
+					zoom={10}
 					mapboxApiAccessToken={'pk.eyJ1IjoiYWNlb2ZzcGllcyIsImEiOiJjajVvaDg0d2Q0MXJhMnFvODUzNjQ3MmZ5In0.xLzbJqDG59zkyw2CKEXaow'}
-					mapStyle="mapbox://styles/mapbox/satellite-v9"
+					mapStyle="mapbox://styles/mapbox/dark-v9"
 					onViewportChange={this.onViewportChange}
 					{...viewport}
 				/>
