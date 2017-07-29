@@ -5,24 +5,42 @@ class Chatbot extends Component {
   constructor (props) {
     super(props);
     this.state = {
-			query: []
+			query: [],
+      tips: true
 		};
+  }
+
+  componentDidUpdate() {
+    if (this.state.query.length > 0 && this.state.tips) {
+      this.setState({ tips: false });
+    }
   }
 
   render() {
     return (
       <div className="chatbot">
-        {this.state.query.length > 0 &&
-          this.state.query.map(function(text, index) {
-            return <Message
-              key={index}
-              text={text}
-              bot={false}
-            />
-          })
+        {this.state.tips &&
+          <div className="tips">
+            Welcome to blah
+          </div>
         }
+        <div className="messages">
+          {this.state.query.length > 0 &&
+            this.state.query.map(function(text, index) {
+              return <Message
+                key={index}
+                text={text}
+                bot={false}
+              />
+            })
+          }
+        </div>
         <div className="search">
-          <input type="text" onKeyDown={this.handleKeyPress.bind(this)} />
+          <input
+            type="text"
+            placeholder="Enter a message..."
+            onKeyDown={this.handleKeyPress.bind(this)}
+          />
         </div>
       </div>
     );
@@ -31,7 +49,7 @@ class Chatbot extends Component {
 	handleKeyPress(e) {
 		if (e.key !== 'Enter') return;
     const query = this.state.query;
-    query.unshift(e.target.value.trim());
+    query.push(e.target.value.trim());
     e.target.value = '';
     this.setState({ query }, function() {
       this.search();
@@ -39,7 +57,7 @@ class Chatbot extends Component {
 	}
 
   search() {
-    const query = this.state.query[0];
+    const query = this.state.query[this.state.query.length - 1];
     const url = `https://api.wit.ai/message?q=${encodeURIComponent(query)}&access_token=VKEWD7DPCTT47EJZT32LOA6VSIIQQCJ2`;
     fetch(url)
       .then((response) => response.json())
