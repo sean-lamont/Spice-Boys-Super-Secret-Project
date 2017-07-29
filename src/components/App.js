@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import Search from './Search';
+import Chatbot from './Chatbot';
+import Map from './Map';
 
 class App extends Component {
   render() {
     return (
-      <Search />
+      <div className="container">
+        <Chatbot />
+        <Map />
+      </div>
     );
   }
 }
