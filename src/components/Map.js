@@ -27,7 +27,7 @@ class Map extends Component {
         window.addEventListener('resize', this._resize);
         this._resize();
         
-        requestJson(document.location.href + '/data/ACT Division Boundaries.geojson', (error, response) => {
+        requestJson(document.location.href + '/datasets/ACT Division Boundaries.geojson', (error, response) => {
             if (!error) {
                 this._loadData(response);
             }
