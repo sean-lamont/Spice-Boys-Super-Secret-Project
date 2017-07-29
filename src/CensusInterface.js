@@ -174,3 +174,4 @@ function get_stat(query, suburb_name){
     }
 
 }
+
