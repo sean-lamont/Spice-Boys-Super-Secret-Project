@@ -67,12 +67,11 @@ class Chatbot extends Component {
       .then((json) => {
         console.log(this.state.message);
         console.log(json);
-      /* Turn the wit output into usable json query */
-	this.botResponse(query_transform(json));
+        this.botResponse(query_transform(json), json);
       }).catch(error => console.log(error));
   }
 
-  botResponse(text) {
+  botResponse(text, json) {
     const intro = {
       text,
       bot: true
@@ -80,11 +79,16 @@ class Chatbot extends Component {
     const message = this.state.message;
     message.push(intro);
     this.setState({ message });
+
+    // This is how the bot can talk to the map - currently is takes a dictionary {"SUBURB": int_value}
+    if(json) {
+      this.props.responded(json);
+    }
   }
 
   printHelp() {
   	const helptext = "Placeholder helptext. Possible stats, transport, jobs, education, recreation, crime, population, livability";
-	this.botResponse(helptext);
+	this.botResponse(helptext, null);
   }
 
 }
