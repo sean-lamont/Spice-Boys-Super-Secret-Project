@@ -29,14 +29,40 @@ function check_valid_place(place) {
 }
 
 /* fields form single suburb */
-function singleSuburb(suburb, fields) {
-	getSuburb({"match": {"suburb": suburb[0]}},
+function singleSuburb(suburb, fields, map_callback) {
+	getSuburb({"match": {"suburb": suburb[0]}}, 
 				(data) => {
-					query2map(data)
+					if (map_callback !== null){
+						map_callback(query2map(data, fields));
+					}
 				});
 }
 /* fields from multiple suburbs*/
-function multiSuburb(suburbs, fields) {}
+function multiSuburb(suburbs, fields, map_callback) {
+	let query = {
+	    "filtered" : {
+            "filter" : {
+                "terms" : { 
+                    "suburb" : suburbs
+                }
+            }
+        }
+    }
+  
+  	getAllSuburbs((data) => {
+  		if (map_callback !== null){
+  			let new_data = {}
+  			for (var key in data){
+  				if (suburbs.indexOf(key) !== -1){
+  					new_data[key] = data[key]
+  				}
+  			}
+			map_callback(query2map(new_data, fields));
+		}
+  	})
+
+
+}
 /* Aggregate data for canberra overview */
 function totalSuburb(fields) {}
 
@@ -130,7 +156,7 @@ export default function query_transform(wit_obj, map_callback) {
 			sub_list[i] = suburb[i].value;
 
 		if (sub_len > 1) {
-			data = multiSuburb(sub_list, field_list);
+			data = multiSuburb(sub_list, field_list, map_callback);
 
 			return "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
 		}
@@ -140,7 +166,7 @@ export default function query_transform(wit_obj, map_callback) {
 				return "Here's the information about "+field_list+" in Canberra";
 			}
 			else {
-				data = singleSuburb(sub_list, field_list);
+				data = singleSuburb(sub_list, field_list, map_callback);
 				return "Here's the information about "+field_list+" in "+suburb[0].value;
 			}
 		}
@@ -188,8 +214,6 @@ export default function query_transform(wit_obj, map_callback) {
         return "I will display the " + stat_name + " data.";
 	}
 
-
-
 	/*  transport, jobs, education, recreation, crime, population, livability */
 	console.log("Invalid query - does not match any structures");
 	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
@@ -202,4 +226,5 @@ function query2map(data, stat_name){
 		let field = stat_name.replace(/ /g, "_");
 		allSuburbs[suburb.toUpperCase()] = data[suburb][field];
 	}
-}
+	return allSuburbs;
+} 
