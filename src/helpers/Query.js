@@ -18,7 +18,7 @@ var error_handler = function (err) {
 
 function example(){
   let printer = function(result) {
-    let objs = result["hits"]["hits"]
+    let objs = result["hits"]["hits"];
     console.log("Query result", objs);
     // objs[<index>]["_source"] to access individual data
     objs["_source"]["livability"]
@@ -58,8 +58,8 @@ function getAll(success_handler){
 function getSuburb(constraint, success_handler, count = 10){
 
   let converter = function(result) {
-    let objects = result["hits"]["hits"]
-    var obj_dict = {}
+    let objects = result["hits"]["hits"];
+    var obj_dict = {};
     
     objects.forEach(function(object) {
       let values = object["_source"];
