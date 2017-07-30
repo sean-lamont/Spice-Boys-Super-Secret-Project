@@ -54,7 +54,8 @@ How many schools are in Red Hill?
 
 ![alt text](https://github.com/Spice-Boys/Spice-Boys-Super-Secret-Project/blob/master/demo_gif.gif "Gif")
 
-Youtube Video
+Watch Our Youtube Video
+
 [![Watch the video](http://img.youtube.com/vi/xv7wLiRRj1w/0.jpg)](https://youtu.be/xv7wLiRRj1w)
 
 ## Built With
