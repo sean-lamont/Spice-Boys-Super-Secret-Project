@@ -187,7 +187,7 @@ export default function query_transform(wit_obj, map_callback) {
 }
 
 // converts query dictionary to map dictionary
-function query2map(datam, stat_name){
+function query2map(data, stat_name){
 	var allSuburbs = {};
 	for (var suburb in data) {
 		let field = stat_name.replace(/ /g, "_");
