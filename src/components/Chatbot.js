@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Message from './Message';
+import query_transform from './Query_transform';
 
 class Chatbot extends Component {
   constructor (props) {
@@ -51,25 +52,26 @@ class Chatbot extends Component {
     const chat = this.refs.chat;
     chat.scrollTop = chat.scrollHeight; // scroll to bottom of chatbot
     this.setState({ message }, function() {
-      this.search();
+	this.search();
     });
 	}
 
   search() {
-    const query = this.state.message[this.state.message.length - 1];
+    const query = JSON.stringify(this.state.message[this.state.message.length - 1]);
+    if (this.state.message[this.state.message.length - 1].text === "help")
+	    return this.printHelp();
+
     const url = `https://api.wit.ai/message?q=${encodeURIComponent(query)}&access_token=VKEWD7DPCTT47EJZT32LOA6VSIIQQCJ2`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
         console.log(this.state.message);
         console.log(json);
-
-        this.props.responded(json);
-
+        this.botResponse(query_transform(json), json);
       }).catch(error => console.log(error));
   }
 
-  botResponse(text) {
+  botResponse(text, json) {
     const intro = {
       text,
       bot: true
@@ -77,7 +79,18 @@ class Chatbot extends Component {
     const message = this.state.message;
     message.push(intro);
     this.setState({ message });
+
+    // This is how the bot can talk to the map - currently is takes a dictionary {"SUBURB": int_value}
+    if(json) {
+      this.props.responded(json);
+    }
   }
+
+  printHelp() {
+  	const helptext = "Placeholder helptext. Possible stats, transport, jobs, education, recreation, crime, population, livability";
+	this.botResponse(helptext, null);
+  }
+
 }
 
 export default Chatbot;
