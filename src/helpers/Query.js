@@ -19,7 +19,7 @@ var error_handler = function (err) {
 
 
 /*Returns suburn data. See below for constraints*/
-function getSuburb(constraint, count = 10){
+function getSuburb(constraint, success_handler, count = 10){
   getSuburbSorted(constraint, [], count);
 }
 
@@ -34,7 +34,7 @@ function getSuburb(constraint, count = 10){
 * 
 */
 
-function getSuburbSorted(constraint, sort_terms, count = 10){
+function getSuburbSorted(constraint, sort_terms, success_handler, count = 10){
   let data_name = 'suburb-detail'
   let query = {
     "size" : count,
