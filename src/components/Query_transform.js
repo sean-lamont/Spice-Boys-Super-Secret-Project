@@ -31,7 +31,9 @@ function check_valid_place(place) {
 /* fields form single suburb */
 function singleSuburb(suburb, fields) {
 	getSuburb({"match": {"suburb": suburb[0]}}, 
-				(data) => console.log(data));
+				(data) => {
+					query2map(data)
+				});
 }
 /* fields from multiple suburbs*/
 function multiSuburb(suburbs, fields) {}
@@ -169,7 +171,7 @@ export default function query_transform(wit_obj, map_callback) {
 		getAllSuburbs(function(data) {
 			console.log(data);
 			
-			map_callback(query2map(data));
+			map_callback(query2map(data, stat_name));
 			//for
 			//stats.value
             //map_callback(data);
@@ -185,7 +187,7 @@ export default function query_transform(wit_obj, map_callback) {
 }
 
 // converts query dictionary to map dictionary
-function query2map(data){
+function query2map(datam, stat_name){
 	var allSuburbs = {};
 	for (var suburb in data) {
 		let field = stat_name.replace(/ /g, "_");
