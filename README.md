@@ -1,5 +1,7 @@
 # CBRstatbot by spiceboys.space
 
+[spice-boys.space](spice-boys.space)
+
 CBRstatbot is a data visualisation web app which aims to provide statistics on the livability of an area. It does so by using many of the open-data sources supplied by the Australian Bureau of Statistics, such as suburb populations, crime statistics, parks, school and bus stop locations, median household rent and incomes and unemployment rates per suburb. CBRstatbot compares these statistics to the state averages, and we aggregate these results to provide a holistic livab ility rating for each suburb. The core of the application is an adaptive 3D map over which the statistics are visualised.
 
 ## Properties
