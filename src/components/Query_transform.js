@@ -169,13 +169,8 @@ export default function query_transform(wit_obj, map_callback) {
 		getAllSuburbs(function(data) {
 			console.log(data);
 			var allSuburbs = {};
-			var max_val = 0;
 			for (var key in data) {
-				max_val = Math.max(max_val, data[key][stat_name.replace(/ /g, "_")])
-			}
-			var scaling_val = 10000 / max_val;
-			for (var key in data) {
-				allSuburbs[key.toUpperCase()] = scaling_val * data[key][stat_name.replace(/ /g, "_")];
+				allSuburbs[key.toUpperCase()] = data[key][stat_name.replace(/ /g, "_")];
 				console.log(key + ": "+ data[key][stat_name.replace(/ /g, "_")]);
 			}
 			map_callback(allSuburbs);
