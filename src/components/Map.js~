@@ -106,7 +106,6 @@ class Map extends Component {
                                  colorScale={colorScale}
                                  heights={heights}
                                  colours={colours}
-                                 onHover={this.handleHover.bind(this)}
         />;
         return (
             <div className="map" ref="mapBox">
