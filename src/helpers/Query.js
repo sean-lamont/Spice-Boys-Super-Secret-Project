@@ -16,12 +16,26 @@ var error_handler = function (err) {
   console.trace(err.message);
 }
 
+
+export default function singleSub(suburb) {
+
+  let printer = function(result) {
+    let objs = result["hits"]["hits"];
+    console.log("Query result", objs);
+};
+
+  console.log(suburb.toLowerCase());
+  getSuburb({"match": {"suburb": suburb.toLowerCase()}}, printer);
+  console.log("Ran singleSub function");
+
+}
+
 function example(){
   let printer = function(result) {
     let objs = result["hits"]["hits"]
     console.log("Query result", objs);
     // objs[<index>]["_source"] to access individual data
-    objs["_source"]["livability"]
+ //   objs["_source"]["livability"]
   }
 
   // get red hill information (case insensitive)
@@ -47,6 +61,9 @@ function example(){
     }], printer, 50)
 }
 
+
+//example();
+//console.log("ran example()");
 
 function getAll(success_handler){
   getSuburb({"match_all": {}}, success_handler, 300);

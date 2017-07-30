@@ -11,6 +11,7 @@
  *	- Textbox overlay (text info)
  */
 import SuburbData from '../data/SuburbCodes.js'
+import singleSub from '../helpers/Query.js'
 
 function check_valid_place(place) {
 
@@ -28,7 +29,10 @@ function check_valid_place(place) {
 }
 
 /* fields form single suburb */
-function singleSuburb(suburb, fields) {}
+function singleSuburb(suburb, fields) {
+	var sub = suburb[0];
+	singleSub(sub);
+}
 /* fields from multiple suburbs*/
 function multiSuburb(suburbs, fields) {}
 /* Aggregate data for canberra overview */
@@ -117,7 +121,8 @@ export default function query_transform(wit_obj) {
 			field_list += stat_list;
 		}
 
-		
+		for (var i = 0; i < sub_len; i++)
+			sub_list[i] = suburb[i].value;	
 
 		if (sub_len > 1) {
 			data = multiSuburb(sub_list, field_list);
