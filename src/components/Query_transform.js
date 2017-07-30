@@ -11,6 +11,7 @@
  *	- Textbox overlay (text info)
  */
 import SuburbData from '../data/SuburbCodes.js'
+import getAllSuburbs from '../helpers/Query.js'
 
 function check_valid_place(place) {
 
@@ -36,14 +37,14 @@ function totalSuburb(fields) {}
 
 
 /* Work out the DB query */
-export default function query_transform(wit_obj) {
+export default function query_transform(wit_obj, map_callback) {
 	/*
 	 * Possible wit object fields:
 	 *	- statistics
 	 *	- place
 	 *	- proximity
 	*/
-	var stats, suburb, place, prox, valid;
+	var stats, suburb, place, prox, valid, graph;
 	var data;
 
 	if (!wit_obj) {
@@ -60,7 +61,6 @@ export default function query_transform(wit_obj) {
 	if (wit_obj.entities.hasOwnProperty('statistic')) {
 		stats = wit_obj.entities.statistic;
 		console.log("Stats: "+stats);
-	
 	}
 	if (wit_obj.entities.hasOwnProperty('suburb')) {
 		suburb = wit_obj.entities.suburb;
@@ -75,6 +75,10 @@ export default function query_transform(wit_obj) {
 		place = wit_obj.entities.place;
 		console.log("Place: "+place);
 	}
+    if (wit_obj.entities.hasOwnProperty('graph')) {
+        graph = true
+        console.log("Graph");
+    }
 
 /*	if (suburb)
 		suburb = check_valid_place(suburb);
@@ -92,6 +96,7 @@ export default function query_transform(wit_obj) {
 	console.log(JSON.stringify(stats));
 
 	if (suburb != null && (stats != null || place != null)) {
+		alert("1");
 		
 		var sub_len = suburb.length;
 		var sub_list = [];
@@ -139,6 +144,7 @@ export default function query_transform(wit_obj) {
 
 	/* if we have a suburb name but no stats, display all info about suburb */
 	else if (suburb != null) {
+        alert("2");
 		var suburb_vals = [];
 			
 		for (var i = 0; i < suburb.length; i++)
@@ -153,6 +159,16 @@ export default function query_transform(wit_obj) {
 			return "Here is an overview for "+suburb_vals;
 		}
 		
+	}
+
+	else if (stats != null && graph != null) {
+		var data = {};
+		alert(stats)
+		getAllSuburbs(function(data) {
+			console.log(data);
+            //map_callback(data);
+		});
+        return "I will display the " + stats[0].value + " data.";
 	}
 
 

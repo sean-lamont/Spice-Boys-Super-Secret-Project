@@ -48,7 +48,7 @@ function example(){
 }
 
 
-function getAll(success_handler){
+export default function getAllSuburbs(success_handler){
   getSuburb({"match_all": {}}, success_handler, 300);
 }
 
