@@ -65,7 +65,7 @@ class Chatbot extends Component {
         console.log(this.state.message);
         console.log(json);
       /* Turn the wit output into usable json query */
-	query_transform(json);
+	this.botResponse(query_transform(json));
       }).catch(error => console.log(error));
   }
 
