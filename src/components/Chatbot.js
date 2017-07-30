@@ -52,12 +52,15 @@ class Chatbot extends Component {
     const chat = this.refs.chat;
     chat.scrollTop = chat.scrollHeight; // scroll to bottom of chatbot
     this.setState({ message }, function() {
-      this.search();
+	this.search();
     });
 	}
 
   search() {
     const query = JSON.stringify(this.state.message[this.state.message.length - 1]);
+    if (this.state.message[this.state.message.length - 1].text === "help")
+	    return this.printHelp();
+
     const url = `https://api.wit.ai/message?q=${encodeURIComponent(query)}&access_token=VKEWD7DPCTT47EJZT32LOA6VSIIQQCJ2`;
     fetch(url)
       .then((response) => response.json())
@@ -78,6 +81,12 @@ class Chatbot extends Component {
     message.push(intro);
     this.setState({ message });
   }
+
+  printHelp() {
+  	const helptext = "Placeholder helptext. Possible stats, transport, jobs, education, recreation, crime, population, livability";
+	this.botResponse(helptext);
+  }
+
 }
 
 export default Chatbot;

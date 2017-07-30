@@ -27,6 +27,13 @@ function check_valid_place(place) {
 	return "";
 }
 
+/* fields form single suburb */
+function singleSuburb(suburb, fields) {}
+/* fields from multiple suburbs*/
+function multiSuburb(suburbs, fields) {}
+/* Aggregate data for canberra overview */
+function totalSuburb(fields) {}
+
 
 /* Work out the DB query */
 export default function query_transform(wit_obj) {
@@ -37,6 +44,8 @@ export default function query_transform(wit_obj) {
 	 *	- proximity
 	*/
 	var stats, suburb, place, prox, valid;
+	var data;
+
 	if (!wit_obj) {
 		console.log("Invalid query - Null object");	
 		return false;
@@ -82,36 +91,73 @@ export default function query_transform(wit_obj) {
 	console.log(JSON.stringify(suburb));
 	console.log(JSON.stringify(stats));
 
-	if (suburb != null && stats != null) {
+	if (suburb != null && (stats != null || place != null)) {
 		
-		var suburb_vals = [];
-		var stats_vals = [];
+		var sub_len = suburb.length;
+		var sub_list = [];
+	        var stat_len;
+		var stat_list = [];
+		var place_len;
+		var place_list = [];
+		var field_list = [];
 
-		for (var i = 0; i < suburb.length; i++)
-			suburb_vals[i] = suburb[i].value;
+		if (place != null) {
+			place_len = place.length;
+			for (var i = 0; i < place_len; i++)
+				place_list[i] = place[i].value;
 
-		for (var i = 0; i < stats.length; i++)
-			stats_vals[i] = stats[i].value;
-
-		console.log(suburb_vals);
-		console.log(stats_vals);
-
-		/* Population queries */
-		if (stats_vals[0] === "population") {
-			if (suburb_vals.length == 1) {
-				if (suburb_vals[0] === "Canberra") 
-					return "Here is the population distribution of Canberra";
-				else
-					return "Here is the population of "+suburb[0].value +" for you";		
-			}
-			else {
-				return "Here is a comparison of the suburbs, "+ suburb_vals +" for you";	
-			}
-
+			field_list = place_list;
 		}
 
+		if (stats != null) {
+			stat_len = stats.length;
+			for (var i = 0; i < stat_len; i++)
+				stat_list[i] = stats[i].value;
+
+			field_list += stat_list;
+		}
+
+		
+
+		if (sub_len > 1) {
+			data = multiSuburb(sub_list, field_list);
+
+			return "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
+		}
+		else {
+			if (suburb[0].value === "Canberra") {
+				data = totalSuburb(field_list);
+				return "Here's the information about "+field_list+" in Canberra";
+			}
+			else {
+				data = singleSuburb(sub_list, field_list);
+				return "Here's the information about "+field_list+" in "+suburb[0].value;
+			}
+		}	
+	
 	}
 
+	/* if we have a suburb name but no stats, display all info about suburb */
+	else if (suburb != null) {
+		var suburb_vals = [];
+			
+		for (var i = 0; i < suburb.length; i++)
+			suburb_vals[i] = suburb[i].value;
+		
+		if (suburb_vals.length > 1) {
+			data = multiSuburb(suburb_vals, []);
+			return "Here is an overview for the following suburbs: "+suburb_vals;
+		}
+		else {
+			data = singleSuburb(suburb_vals, []);
+			return "Here is an overview for "+suburb_vals;
+		}
+		
+	}
+
+
+
+	/*  transport, jobs, education, recreation, crime, population, livability */
 	console.log("Invalid query - does not match any structures");
-	return "I'm sorry, I didn't understand that.";
+	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
 }
