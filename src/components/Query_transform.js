@@ -214,7 +214,7 @@ export default function query_transform(wit_obj, map_callback, bot_print) {
 			suburb_vals[i] = suburb[i].value;
 
 		if (suburb_vals.length > 1) {
-			data = multiSuburb(suburb_vals, [], bot_print);
+			data = multiSuburb(suburb_vals, [], null, bot_print);
 			var str = "Here is an overview for the following suburbs: "+suburb_vals;
 			bot_print(str);
 			return;
@@ -253,7 +253,9 @@ export default function query_transform(wit_obj, map_callback, bot_print) {
 
 	/*  transport, jobs, education, recreation, crime, population, livability */
 	console.log("Invalid query - does not match any structures");
-	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
+	
+	bot_print("I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.");
+	return;
 }
 
 // converts query dictionary to map dictionary
