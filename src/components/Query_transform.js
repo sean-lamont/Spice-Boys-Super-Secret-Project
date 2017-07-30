@@ -57,7 +57,18 @@ function multiSuburb(suburbs, fields, map_callback) {
   					new_data[key] = data[key]
   				}
   			}
-			map_callback(query2map(new_data, fields));
+
+  			// array representation of data
+  			let map_dict = query2map(new_data, fields)
+  			var arr = Object.keys( map_dict ).map(function ( key ) { return map_dict[key]; });
+  			var max_val = Math.max.apply( null, arr );
+
+  			var scaling_val = 10000 / max_val;
+			for (var key in map_dict) {
+				map_dict[key] = scaling_val * map_dict[key];
+			}
+
+			map_callback(map_dict);
 		}
   	})
 
