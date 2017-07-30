@@ -1,0 +1,74 @@
+#### bus-stop 
+
+# set mapping
+curl --user elastic:bxwsqK27L3524M60bSupAbeI -XPUT https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/bus-stop -d '{
+  "mappings": {
+    "bus-stop": {
+      "properties": {
+        "location": {
+          "type": "geo_point"
+        }
+      }
+    }
+  }
+}
+';
+
+# upload bus-stop.json
+curl --user elastic:bxwsqK27L3524M60bSupAbeI -XPUT https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/_bulk --data-binary @bus-stop.json
+
+# query for id = 2
+curl --user elastic:bxwsqK27L3524M60bSupAbeI -i -H "Accept: application/json" "https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/bus-stop/_search" -d '{"query": { "match": {"_id": "2"}}}'
+
+# query with location filtering and sorting
+curl --user elastic:bxwsqK27L3524M60bSupAbeI type="application/json" -i -H "Accept: application/json" "https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/bus-stop/_search" -d '{
+  "size" : 50,
+  "sort" : [
+    {
+        "_geo_distance" : {
+            "location" : [149.1155, -35.418312],
+            "order" : "asc",
+            "unit" : "km"
+        }
+    }
+  ],
+  "query": {
+    "bool": {
+      "filter":{
+        "geo_distance": {
+          "distance": "1km",
+          "distance_type": "plane",
+          "location": {
+            "lat":  -35.418312,
+            "lon": 149.1155
+          }
+        }
+      }
+    }
+  }
+}'
+
+
+##### suburb
+
+# set mapping
+curl --user elastic:bxwsqK27L3524M60bSupAbeI -XPUT https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/suburb -d '{
+  "mappings": {
+    "suburb": {
+      "properties": {
+        "geometry": {
+          "type": "geo_shape"
+        }
+      }
+    }
+  }
+}
+';
+
+# upload suburb.json
+curl --user elastic:bxwsqK27L3524M60bSupAbeI -XPUT https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/_bulk --data-binary @suburb.json
+
+##### suburb detail
+
+#upload suburb-detail.json
+curl --user elastic:bxwsqK27L3524M60bSupAbeI -XPUT https://c9eb3dcc4c763654ee55087b8c4cd9d2.ap-southeast-2.aws.found.io:9243/_bulk --data-binary @suburb-detail.json
