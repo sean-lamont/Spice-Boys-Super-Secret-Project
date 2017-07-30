@@ -49,54 +49,69 @@ export default function query_transform(wit_obj) {
 
 
 	if (wit_obj.entities.hasOwnProperty('statistic')) {
-		stats = wit_obj.entities.statistic[0].value;
+		stats = wit_obj.entities.statistic;
 		console.log("Stats: "+stats);
 	
 	}
 	if (wit_obj.entities.hasOwnProperty('suburb')) {
-		suburb = wit_obj.entities.suburb[0].value;
+		suburb = wit_obj.entities.suburb;
 		console.log("Suburb: "+suburb);
 	
 	}
 	if (wit_obj.entities.hasOwnProperty('proximity')) {
-		prox = wit_obj.entities.proximity[0].value;
+		prox = wit_obj.entities.proximity;
 		console.log("Proximity: "+prox);	
 	}
 	if (wit_obj.entities.hasOwnProperty('place')) {
-		place = wit_obj.entities.place[0].value;
+		place = wit_obj.entities.place;
 		console.log("Place: "+place);
 	}
 
-	if (suburb)
+/*	if (suburb)
 		suburb = check_valid_place(suburb);
 
 	if (suburb === "")
 		console.log("Not a valid location");
-
+*/
 	/*
 	 * Query examples:
 	 *	- What is the population of Red Hill?
 	 *		==> stat = population, place = Red Hill
 	 *	- 
 	 */	   
+	console.log(JSON.stringify(suburb));
+	console.log(JSON.stringify(stats));
 
-	if (suburb === "Canberra" && stats === "population") {
-		/* Special case, show heatmap of population distrubution */
-		console.log("Finding population in Canberra");
-		return;
-	
-	}
-	else if (suburb !== "" && stats === "population") {	
-		/* Query = find population of $place */
+	if (suburb != null && stats != null) {
 		
-		console.log("Finding population in "+ suburb);
-		return;		
+		var suburb_vals = [];
+		var stats_vals = [];
+
+		for (var i = 0; i < suburb.length; i++)
+			suburb_vals[i] = suburb[i].value;
+
+		for (var i = 0; i < stats.length; i++)
+			stats_vals[i] = stats[i].value;
+
+		console.log(suburb_vals);
+		console.log(stats_vals);
+
+		/* Population queries */
+		if (stats_vals[0] === "population") {
+			if (suburb_vals.length == 1) {
+				if (suburb_vals[0] === "Canberra") 
+					return "Here is the population distribution of Canberra";
+				else
+					return "Here is the population of "+suburb[0].value +" for you";		
+			}
+			else {
+				return "Here is a comparison of the suburbs, "+ suburb_vals +" for you";	
+			}
+
+		}
+
 	}
-
-
-
-
 
 	console.log("Invalid query - does not match any structures");
-	return false;
+	return "I'm sorry, I didn't understand that.";
 }
