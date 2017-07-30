@@ -43,7 +43,7 @@ Show me population in Acton and O'Connor
 ### Chatbot for directly comparing suburb statistics
 
 ### Link to video
-
+[![Watch the video](http://img.youtube.com/vi/xv7wLiRRj1w/0.jpg)](https://youtu.be/xv7wLiRRj1w)
 
 ## Built With
 
