@@ -71,3 +71,22 @@ body {
   float: left;
   position: relative;
 }
+.scale {
+  background-color: white;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.scale div {
+  background-image: url('img/scale.jpg');
+  background-size: contain;
+  width: 200px;
+  height: 15px;
+}
+.scale span {
+  padding: 5px 10px;
+  float: left;
+}
+.scale span:last-child {
+  float: right;
+}
