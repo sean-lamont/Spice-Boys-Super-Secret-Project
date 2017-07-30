@@ -11,7 +11,7 @@
  *	- Textbox overlay (text info)
  */
 import SuburbData from '../data/SuburbCodes.js'
-import getAllSuburbs from '../helpers/Query.js'
+import {getAllSuburbs, getSuburb} from '../helpers/Query.js'
 
 function check_valid_place(place) {
 
@@ -29,7 +29,10 @@ function check_valid_place(place) {
 }
 
 /* fields form single suburb */
-function singleSuburb(suburb, fields) {}
+function singleSuburb(suburb, fields) {
+	getSuburb({"match": {"suburb": suburb[0]}}, 
+				(data) => console.log(data));
+}
 /* fields from multiple suburbs*/
 function multiSuburb(suburbs, fields) {}
 /* Aggregate data for canberra overview */
