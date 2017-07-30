@@ -31,7 +31,7 @@ show me data about schools
 
 Other fun examples
 ```
-show me hiw fun the suburbs are
+show me how fun the suburbs are
 show me predictions for crimes in 2018
 ```
 
@@ -41,38 +41,41 @@ Show me population in Acton and O'Connor
 ```
 
 ### Chatbot for directly comparing suburb statistics
+Getting complicated queries is still a work in progress. 
+For now the following work:
+```
+What's the population of Kingston?
+What's the crime rate in Turner?
+What's the education rate in Monash?
+How many schools are in Red Hill?
+```
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+### Link to video
+[![Watch the video](http://img.youtube.com/vi/xv7wLiRRj1w/0.jpg)](https://youtu.be/xv7wLiRRj1w)
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+* [React](https://facebook.github.io/react/) - The web framework used
+* [Mapbox](https://www.mapbox.com/) - Map based data visualisation framework
+* [Wit.ai](https://wit.ai/) - Natural Language framework for chatbox
+* [Elastic Stack](https://www.elastic.co/products) - Data storage and search on the cloud
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Noah Imgham** - ()
+* **Jaz Gulati** - ()
+* **Lachlan Stevens** - ()
+* **Matt Brown** - ()
+* **James Parker** - ()
+* **Reilly Francis** - ()
+* **Sean Lamont** - ()
+* **Chamin Hewa Koneputugodage** - ()
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
+* Thanks to GovHack 2017 for hosting this fun event
 * etc
 
