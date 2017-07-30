@@ -79,7 +79,7 @@ export default function query_transform(wit_obj, map_callback) {
 	var data;
 
 	if (!wit_obj) {
-		console.log("Invalid query - Null object");	
+		console.log("Invalid query - Null object");
 		return false;
 	}
 
@@ -96,11 +96,11 @@ export default function query_transform(wit_obj, map_callback) {
 	if (wit_obj.entities.hasOwnProperty('suburb')) {
 		suburb = wit_obj.entities.suburb;
 		console.log("Suburb: "+suburb);
-	
+
 	}
 	if (wit_obj.entities.hasOwnProperty('proximity')) {
 		prox = wit_obj.entities.proximity;
-		console.log("Proximity: "+prox);	
+		console.log("Proximity: "+prox);
 	}
 	if (wit_obj.entities.hasOwnProperty('place')) {
 		place = wit_obj.entities.place;
@@ -121,8 +121,8 @@ export default function query_transform(wit_obj, map_callback) {
 	 * Query examples:
 	 *	- What is the population of Red Hill?
 	 *		==> stat = population, place = Red Hill
-	 *	- 
-	 */	   
+	 *	-
+	 */
 	console.log(JSON.stringify(suburb));
 	console.log(JSON.stringify(stats));
 
@@ -169,17 +169,17 @@ export default function query_transform(wit_obj, map_callback) {
 				data = singleSuburb(sub_list, field_list, map_callback);
 				return "Here's the information about "+field_list+" in "+suburb[0].value;
 			}
-		}	
-	
+		}
+
 	}
 
 	/* if we have a suburb name but no stats, display all info about suburb */
 	else if (suburb != null) {
 		var suburb_vals = [];
-			
+
 		for (var i = 0; i < suburb.length; i++)
 			suburb_vals[i] = suburb[i].value;
-		
+
 		if (suburb_vals.length > 1) {
 			data = multiSuburb(suburb_vals, []);
 			return "Here is an overview for the following suburbs: "+suburb_vals;
@@ -188,16 +188,25 @@ export default function query_transform(wit_obj, map_callback) {
 			data = singleSuburb(suburb_vals, []);
 			return "Here is an overview for "+suburb_vals;
 		}
-		
+
 	}
 
 	else if (stats != null && graph != null) {
 		var data = {};
 		const stat_name = stats[0].value.toLowerCase();
 		getAllSuburbs(function(data) {
-			console.log(data);
-			
-			map_callback(query2map(data, stat_name));
+			// console.log(data);
+			var allSuburbs = {};
+			var max_val = 0;
+			for (var key in data) {
+				max_val = Math.max(max_val, data[key][stat_name.replace(/ /g, "_")])
+			}
+			var scaling_val = 10000 /max_val;
+			for (var key in data) {
+				allSuburbs[key.toUpperCase()] = scaling_val * data[key][stat_name.replace(/ /g, "_")];
+				// console.log(key + ": "+ data[key][stat_name.replace(/ /g, "_")]);
+			}
+			map_callback(allSuburbs);
 			//for
 			//stats.value
             //map_callback(data);
