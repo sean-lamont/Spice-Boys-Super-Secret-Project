@@ -30,11 +30,14 @@ function check_valid_place(place) {
 
 function displayData(data, suburb, fields) {
 
-	console.log(data);
-	console.log(fields);
-	console.log(data[suburb]);
-	console.log(data[suburb][fields]);
-	return""+suburb+" "+fields+": "+ data[suburb][fields.toLowerCase()];
+	if (!Array.isArray(suburb) && !Array.isArray(fields)) {
+		console.log(data);
+		console.log(fields);
+		console.log(data[suburb]);
+		console.log(data[suburb][fields]);
+		return""+suburb+" "+fields+": "+ data[suburb][fields.toLowerCase()];
+	
+	}
 }
 
 /* fields form single suburb */
@@ -48,7 +51,7 @@ function singleSuburb(suburb, fields, map_callback, print_callback) {
 				});
 }
 /* fields from multiple suburbs*/
-function multiSuburb(suburbs, fields, map_callback) {
+function multiSuburb(suburbs, fields, map_callback, print_callback) {
 	let query = {
 	    "filtered" : {
             "filter" : {
@@ -69,6 +72,7 @@ function multiSuburb(suburbs, fields, map_callback) {
   			}
 			map_callback(query2map(new_data, fields));
 		}
+		print_callback(displayData(data, suburbs, fields));
   	})
 
 
@@ -171,7 +175,7 @@ export default function query_transform(wit_obj, map_callback, bot_print) {
 		if (sub_len > 1) {
 			var str = "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
 			bot_print(str);
-			data = multiSuburb(sub_list, field_list, map_callback);
+			data = multiSuburb(sub_list, field_list, map_callback, bot_print);
 			return;
 		}
 		else {
@@ -199,13 +203,13 @@ export default function query_transform(wit_obj, map_callback, bot_print) {
 			suburb_vals[i] = suburb[i].value;
 
 		if (suburb_vals.length > 1) {
-			data = multiSuburb(suburb_vals, []);
+			data = multiSuburb(suburb_vals, [], bot_print);
 			var str = "Here is an overview for the following suburbs: "+suburb_vals;
 			bot_print(str);
 			return;
 		}
 		else {
-			data = singleSuburb(suburb_vals, [], bot_print);
+			data = singleSuburb(suburb_vals, [], null, bot_print);
 			var str = "Here is an overview for "+suburb_vals;
 			bot_print(str);
 			return;
