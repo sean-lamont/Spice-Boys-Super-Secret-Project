@@ -31,7 +31,9 @@ function check_valid_place(place) {
 /* fields form single suburb */
 function singleSuburb(suburb, fields) {
 	getSuburb({"match": {"suburb": suburb[0]}}, 
-				(data) => console.log(data));
+				(data) => {
+					query2map(data)
+				});
 }
 /* fields from multiple suburbs*/
 function multiSuburb(suburbs, fields) {}
@@ -169,8 +171,13 @@ export default function query_transform(wit_obj, map_callback) {
 		getAllSuburbs(function(data) {
 			console.log(data);
 			var allSuburbs = {};
+			var max_val = 0;
 			for (var key in data) {
-				allSuburbs[key.toUpperCase()] = data[key][stat_name.replace(/ /g, "_")];
+				max_val = Math.max(max_val, data[key][stat_name.replace(/ /g, "_")])
+			}
+			var scaling_val = 10000 /max_val;
+			for (var key in data) {
+				allSuburbs[key.toUpperCase()] = scaling_val * data[key][stat_name.replace(/ /g, "_")];
 				console.log(key + ": "+ data[key][stat_name.replace(/ /g, "_")]);
 			}
 			map_callback(allSuburbs);
@@ -187,3 +194,12 @@ export default function query_transform(wit_obj, map_callback) {
 	console.log("Invalid query - does not match any structures");
 	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
 }
+
+// converts query dictionary to map dictionary
+function query2map(data, stat_name){
+	var allSuburbs = {};
+	for (var suburb in data) {
+		let field = stat_name.replace(/ /g, "_");
+		allSuburbs[suburb.toUpperCase()] = data[suburb][field];
+	}
+} 
