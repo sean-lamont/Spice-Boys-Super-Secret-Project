@@ -54,7 +54,7 @@ class Map extends Component {
     }
 
     zoomIntoSuburb(suburb) {
-
+        const geometry = this.state.data[suburb.to];
     }
 
     getSuburbName(suburb) {
