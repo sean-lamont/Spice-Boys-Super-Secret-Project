@@ -53,7 +53,6 @@ export function getAllSuburbs(success_handler){
 }
 
 
-
 /*Returns suburn data. See below for constraints*/
 export function getSuburb(constraint, success_handler, count = 10){
 

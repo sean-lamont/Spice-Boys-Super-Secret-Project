@@ -92,7 +92,7 @@ class Map extends Component {
     }
 
 	handleHover(e) {
-		console.log(e, "THIS");
+		// console.log(e, "THIS");
 	}
 		
     render() {
