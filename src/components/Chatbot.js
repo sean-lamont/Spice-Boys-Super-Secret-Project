@@ -67,7 +67,12 @@ class Chatbot extends Component {
       .then((json) => {
         console.log(this.state.message);
         console.log(json);
-        this.botResponse(query_transform(json, this.props.responded));
+     	var response = query_transform(json, this.props.responded, this.displayData.bind(this));
+	console.log(response);
+	this.botResponse(response.respond);
+//	this.displayData(response.data, response.fields);
+
+     	//this.botResponse(query_transform(json, this.props.responded));
       }).catch(error => console.log(error));
   }
 
@@ -81,6 +86,20 @@ class Chatbot extends Component {
     this.setState({ message });
 
     // This is how the bot can talk to the map - currently is takes a dictionary {"SUBURB": int_value}
+  }
+
+  displayData(data, fields) {
+  	/* Print out the JSON data */
+	  alert("display data");
+	  var out = "";
+	  var keys = Object.keys(data);
+
+	  for(var i = 0; i < keys.length; i++) {
+	  	out += ""+keys[i]+": "+data.keys[i]+"\n";
+	  }
+
+	this.botResponse(out);
+
   }
 
   printHelp() {

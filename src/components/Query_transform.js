@@ -38,9 +38,8 @@ function multiSuburb(suburbs, fields) {}
 /* Aggregate data for canberra overview */
 function totalSuburb(fields) {}
 
-
 /* Work out the DB query */
-export default function query_transform(wit_obj, map_callback) {
+export default function query_transform(wit_obj, map_callback, this_context) {
 	/*
 	 * Possible wit object fields:
 	 *	- statistics
@@ -129,17 +128,31 @@ export default function query_transform(wit_obj, map_callback) {
 
 		if (sub_len > 1) {
 			data = multiSuburb(sub_list, field_list);
-
-			return "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
+			console.log(JSON.stringify(data));
+			this_context(data);
+			var str = "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
+			return {respond : str,
+			       	record : data,
+			        fields : field_list};
 		}
 		else {
 			if (suburb[0].value === "Canberra") {
 				data = totalSuburb(field_list);
-				return "Here's the information about "+field_list+" in Canberra";
+				console.log(JSON.stringify(data));
+				this_context(data);
+				var str = "Here's the information about "+field_list+" in Canberra";
+			return {respond : str,
+			       	record : data,
+			        fields : field_list};
 			}
 			else {
 				data = singleSuburb(sub_list, field_list);
-				return "Here's the information about "+field_list+" in "+suburb[0].value;
+				console.log(JSON.stringify(data));
+				this_context(data);
+				var str = "Here's the information about "+field_list+" in "+suburb[0].value;
+			return {respond : str,
+			       	record : data,
+			        fields : field_list};
 			}
 		}	
 	
@@ -154,11 +167,22 @@ export default function query_transform(wit_obj, map_callback) {
 		
 		if (suburb_vals.length > 1) {
 			data = multiSuburb(suburb_vals, []);
-			return "Here is an overview for the following suburbs: "+suburb_vals;
+			console.log(JSON.stringify(data));
+			this_context(data);
+			var str = "Here is an overview for the following suburbs: "+suburb_vals;
+			return {respond : str,
+				record : multiSuburb(suburb_vals, []),
+				fields : null};
+
 		}
 		else {
 			data = singleSuburb(suburb_vals, []);
-			return "Here is an overview for "+suburb_vals;
+			var str = "Here is an overview for "+suburb_vals;
+			console.log(JSON.stringify(data));
+			this_context(data);
+			return {respond : str,
+				record : singleSuburb(suburb_vals, []),
+				fields : null};
 		}
 		
 	}
@@ -178,12 +202,14 @@ export default function query_transform(wit_obj, map_callback) {
 			//stats.value
             //map_callback(data);
 		});
-        return "I will display the " + stat_name + " data.";
+	var str = "I will display the " + stat_name + " data.";
+	return {respond : str,
+		record : null,
+		fields : null};
 	}
-
 
 
 	/*  transport, jobs, education, recreation, crime, population, livability */
 	console.log("Invalid query - does not match any structures");
-	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
+	return {respond : "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information."};
 }
