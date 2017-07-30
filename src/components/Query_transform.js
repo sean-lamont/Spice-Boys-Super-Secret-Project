@@ -122,7 +122,8 @@ export default function query_transform(wit_obj, map_callback) {
 			field_list += stat_list;
 		}
 
-		
+		for (var i = 0; i < sub_len; i++)
+			sub_list[i] = suburb[i].value;
 
 		if (sub_len > 1) {
 			data = multiSuburb(sub_list, field_list);
