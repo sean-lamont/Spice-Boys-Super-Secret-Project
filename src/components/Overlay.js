@@ -31,11 +31,6 @@ export default class Overlay extends Component {
         return 1;
     }
 
-    componentWillReceiveProps(nextProps) {
-        //console.log("here");
-        this.forceUpdate();
-    }
-
     render() {
         const {viewport, data, colorScale} = this.props;
 
@@ -50,7 +45,7 @@ export default class Overlay extends Component {
         const layer = new GeoJsonLayer({
             id: 'geojson',
             data: newdata,
-            opacity: 0.8,
+            opacity: 0.6,
             stroked: false,
             filled: true,
             extruded: true,
