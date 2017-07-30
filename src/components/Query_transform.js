@@ -62,7 +62,7 @@ export default function query_transform(wit_obj) {
 		prox = wit_obj.entities.proximity[0].value;
 		console.log("Proximity: "+prox);	
 	}
-	if (wit_obj.entities.hasOwnPropert('place')) {
+	if (wit_obj.entities.hasOwnProperty('place')) {
 		place = wit_obj.entities.place[0].value;
 		console.log("Place: "+place);
 	}
