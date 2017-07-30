@@ -41,6 +41,14 @@ Show me population in Acton and O'Connor
 ```
 
 ### Chatbot for directly comparing suburb statistics
+Getting complicated queries is still a work in progress. 
+For now the following work:
+```
+What's the population of Kingston?
+What's the crime rate in Turner?
+What's the education rate in Monash?
+How many schools are in Red Hill?
+```
 
 ### Link to video
 [![Watch the video](http://img.youtube.com/vi/xv7wLiRRj1w/0.jpg)](https://youtu.be/xv7wLiRRj1w)
@@ -51,9 +59,6 @@ Show me population in Acton and O'Connor
 * [Mapbox](https://www.mapbox.com/) - Map based data visualisation framework
 * [Wit.ai](https://wit.ai/) - Natural Language framework for chatbox
 * [Elastic Stack](https://www.elastic.co/products) - Data storage and search on the cloud
-
-## Contributing
-
 
 ## Authors
 
