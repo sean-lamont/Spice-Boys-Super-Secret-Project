@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
 import Message from './Message';
+import query_transform from './Query_transform';
 
 class Chatbot extends Component {
   constructor (props) {
     super(props);
     this.state = {
-			query: []
+			message: []
 		};
+  }
+
+  componentDidMount() {
+    this.botResponse("Hi! My name is blah. I'm here to help you with blah!");
   }
 
   render() {
     return (
-      <div className="chatbot">
+      <div ref="chat" className="chatbot">
         <div className="messages">
-          <Message
-            text="Hi! My name's ____. I'm here to help you with blah blah blah!"
-            bot={true}
-          />
-          {this.state.query.length > 0 &&
-            this.state.query.map(function(text, index) {
+          {this.state.message.length > 0 &&
+            this.state.message.map(function(message, index) {
               return <Message
                 key={index}
-                text={text}
-                bot={false}
+                text={message.text}
+                bot={message.bot}
               />
             })
           }
@@ -39,24 +40,43 @@ class Chatbot extends Component {
   }
 
 	handleKeyPress(e) {
-		if (e.key !== 'Enter') return;
-    const query = this.state.query;
-    query.push(e.target.value.trim());
-    e.target.value = '';
-    this.setState({ query }, function() {
+		if (e.key !== 'Enter') return; // proceed if 'Enter'
+    const message = this.state.message;
+    const current = {
+      text: e.target.value.trim(),
+      bot: false
+    }
+    if (!current.text) return; // return if empty
+    message.push(current);
+    e.target.value = ''; // clear textbox
+    const chat = this.refs.chat;
+    chat.scrollTop = chat.scrollHeight; // scroll to bottom of chatbot
+    this.setState({ message }, function() {
       this.search();
     });
 	}
 
   search() {
-    const query = this.state.query[this.state.query.length - 1];
+    const query = JSON.stringify(this.state.message[this.state.message.length - 1]);
     const url = `https://api.wit.ai/message?q=${encodeURIComponent(query)}&access_token=VKEWD7DPCTT47EJZT32LOA6VSIIQQCJ2`;
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        console.log(this.state.query);
+        console.log(this.state.message);
         console.log(json);
+      /* Turn the wit output into usable json query */
+	query_transform(json);
       }).catch(error => console.log(error));
+  }
+
+  botResponse(text) {
+    const intro = {
+      text,
+      bot: true
+    }
+    const message = this.state.message;
+    message.push(intro);
+    this.setState({ message });
   }
 }
 

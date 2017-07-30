@@ -7,8 +7,9 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <Chatbot />
-        <Map />
+          <Chatbot />
+
+          <Map />
       </div>
     );
   }
