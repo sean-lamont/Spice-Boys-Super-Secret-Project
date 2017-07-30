@@ -25,7 +25,7 @@ export default class Overlay extends Component {
     getHeight(name) {
         const heights = this.props.heights;
         if (heights) {
-            console.log("showing "+name + ": " + heights[name]);
+            // console.log("showing "+name + ": " + heights[name]);
             return heights[name];
         }
         return 1;

@@ -102,6 +102,7 @@ class Map extends Component {
       this.setState({ hoverData }); // hide tooltip when not hovered
       return;
     }
+    console.log(item, "THISSSS");
     this.refs.tooltip.style.top=item.y+"px";
     this.refs.tooltip.style.left=item.x+"px";
     const hoverData = {
