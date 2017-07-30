@@ -1,5 +1,5 @@
-import $ from 'jquery'; 
 import elasticsearch from 'elasticsearch'
+
 
 let client = new elasticsearch.Client({
   host: [
@@ -9,23 +9,41 @@ let client = new elasticsearch.Client({
       protocol: 'https',
       port: 9243
     }
-  ],
-  log: 'trace'
+  ]
 })
 
 var error_handler = function (err) {
   console.trace(err.message);
 }
 
+function example(){
+  let printer = function(result) {
+    let objs = result["hits"]["hits"]
+    console.log("Query result", objs);
+    // objs[<index>]["_source"] to access individual data
+  }
+
+  // get red hill information (case insensitive)
+  getSuburb({"match": {"suburb": "red hill"}}, printer);
+
+  // get 50 livability data in descending order
+  getSuburbSorted({"match_all": {}}, 
+    [{"livability": {
+      "order": "desc"
+      }
+    }], printer, 50)
+}
+
 
 /*Returns suburn data. See below for constraints*/
 function getSuburb(constraint, success_handler, count = 10){
-  getSuburbSorted(constraint, [], count);
+  getSuburbSorted(constraint, [], success_handler, count);
 }
 
 /** constraint example
-* { "id": 2, ... }
-* 
+* {"match": { "id": 2, ... }}
+* {"match_all": {}}
+*
 * sort: array of sort terms
 * { <term> : { "order": <"asc"|"desc">}}
 *
@@ -34,14 +52,12 @@ function getSuburb(constraint, success_handler, count = 10){
 * 
 */
 
-function getSuburbSorted(constraint, sort_terms, success_handler, count = 10){
+function getSuburbSorted(constraints, sort_terms, success_handler, count = 10){
   let data_name = 'suburb-detail'
   let query = {
     "size" : count,
     "sort" : sort_terms,
-    "query": {
-      match: constraint
-    }
+    "query": constraints
   }
   performQuery(data_name, query, success_handler);
 }
@@ -55,3 +71,85 @@ function performQuery(data_name, query, success_handler) {
     body: query
   }).then( success_handler, error_handler);
 }
+
+
+/** database fields
+"sport_grounds": {
+  "type": "long"
+},
+"fitness_sites": {
+  "type": "long"
+},
+"recreation&fitness": {
+  "type": "float"
+},
+"education": {
+  "type": "float"
+},
+"closest_hospital": {
+  "type": "text",
+  "fields": {
+    "keyword": {
+      "ignore_above": 256,
+      "type": "keyword"
+    }
+  }
+},
+"time_to_hospital": {
+  "type": "float"
+},
+"crimes": {
+  "type": "long"
+},
+"skate_parks": {
+  "type": "long"
+},
+"transport": {
+  "type": "float"
+},
+"closest_tc": {
+  "type": "text",
+  "fields": {
+    "keyword": {
+      "ignore_above": 256,
+      "type": "keyword"
+    }
+  }
+},
+"bus_to_tc": {
+  "type": "float"
+},
+"population": {
+  "type": "long"
+},
+"basketball_courts": {
+  "type": "long"
+},
+"schools": {
+  "type": "long"
+},
+"crimespp": {
+  "type": "float"
+},
+"livability": {
+  "type": "float"
+},
+"unemployment": {
+  "type": "float"
+},
+"suburb": {
+  "type": "text",
+  "fields": {
+    "keyword": {
+      "ignore_above": 256,
+      "type": "keyword"
+    }
+  }
+},
+"playgrounds": {
+  "type": "long"
+},
+"bus_stops": {
+  "type": "long"
+}
+*/
