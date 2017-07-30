@@ -54,7 +54,8 @@ class Map extends Component {
     }
 
     zoomIntoSuburb(suburb) {
-
+        const geometry = this.state.data[suburb.to];
+        console.log(geometry);
     }
 
     getSuburbName(suburb) {
@@ -102,7 +103,6 @@ class Map extends Component {
       this.setState({ hoverData }); // hide tooltip when not hovered
       return;
     }
-    console.log(item, "THISSSS");
     this.refs.tooltip.style.top=item.y+"px";
     this.refs.tooltip.style.left=item.x+"px";
     const hoverData = {
@@ -116,7 +116,6 @@ class Map extends Component {
         const {viewport, colours} = this.state;
         const data= this.props.data;
         const heights = this.props.heights;
-        console.log(heights);
         const overlay = <Overlay viewport={viewport}
                                  data={data}
                                  colorScale={colorScale}
