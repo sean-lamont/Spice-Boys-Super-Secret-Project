@@ -21,23 +21,54 @@ function example(){
     let objs = result["hits"]["hits"]
     console.log("Query result", objs);
     // objs[<index>]["_source"] to access individual data
+    objs["_source"]["livability"]
   }
 
   // get red hill information (case insensitive)
   getSuburb({"match": {"suburb": "red hill"}}, printer);
 
+  // multiple terms
+  /*{"query" : {
+        "filtered" : {
+            "filter" : {
+                "terms" : { 
+                    "price" : [20, 30]
+                }
+            }
+        }
+    }
+  }*/
+
   // get 50 livability data in descending order
   getSuburbSorted({"match_all": {}}, 
     [{"livability": {
-      "order": "desc"
+      "order": "asc"
       }
     }], printer, 50)
 }
 
 
+function getAll(success_handler){
+  getSuburb({"match_all": {}}, success_handler, 300);
+}
+
+
+
 /*Returns suburn data. See below for constraints*/
 function getSuburb(constraint, success_handler, count = 10){
-  getSuburbSorted(constraint, [], success_handler, count);
+
+  let converter = function(result) {
+    let objects = result["hits"]["hits"]
+    var obj_dict = {}
+    
+    objects.forEach(function(object) {
+      let values = object["_source"];
+      obj_dict[values["suburb"]] = values;
+    });
+    success_handler(obj_dict);
+  }
+
+  getSuburbSorted(constraint, [], converter, count);
 }
 
 /** constraint example
@@ -65,6 +96,8 @@ function getSuburbSorted(constraints, sort_terms, success_handler, count = 10){
 
 
 function performQuery(data_name, query, success_handler) {
+
+
   client.search({
     index: data_name,
     type: data_name,
