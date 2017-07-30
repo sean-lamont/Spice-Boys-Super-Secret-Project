@@ -68,7 +68,10 @@ class Map extends Component {
             viewport: {
                 ...defaultViewport,
             },
-            data: null
+            data: null,
+            hoverData: {
+              suburb: null
+            }
         };
     }
 
@@ -91,10 +94,22 @@ class Map extends Component {
         });
     }
 
-	handleHover(e) {
-		console.log(e, "THIS");
+	handleHover(item) {
+    if (!item.object) {
+      const hoverData = {
+        suburb: null
+      }
+      this.setState({ hoverData }); // hide tooltip when not hovered
+      return;
+    }
+    this.refs.tooltip.style.top=item.y+"px";
+    this.refs.tooltip.style.left=item.x+"px";
+    const hoverData = {
+      suburb: item.object.properties.division_name
+    }
+    this.setState({ hoverData });
 	}
-		
+
     render() {
         //this.showAllSuburbs();
         const {viewport, colours} = this.state;
@@ -117,6 +132,13 @@ class Map extends Component {
                 >
                     {overlay}
                 </MapGL>
+                <div ref="tooltip" className="tooltip">
+                  {this.state.hoverData.suburb &&
+                    <span>
+                      {this.state.hoverData.suburb}
+                    </span>
+                  }
+                </div>
                 <div className="scale">
                   <div></div>
                   <span>Fewer</span><span>More</span>
