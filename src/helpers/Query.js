@@ -48,14 +48,14 @@ function example(){
 }
 
 
-export default function getAllSuburbs(success_handler){
+export function getAllSuburbs(success_handler){
   getSuburb({"match_all": {}}, success_handler, 300);
 }
 
 
 
 /*Returns suburn data. See below for constraints*/
-function getSuburb(constraint, success_handler, count = 10){
+export function getSuburb(constraint, success_handler, count = 10){
 
   let converter = function(result) {
     let objects = result["hits"]["hits"];
@@ -83,7 +83,7 @@ function getSuburb(constraint, success_handler, count = 10){
 * 
 */
 
-function getSuburbSorted(constraints, sort_terms, success_handler, count = 10){
+export function getSuburbSorted(constraints, sort_terms, success_handler, count = 10){
   let data_name = 'suburb-detail'
   let query = {
     "size" : count,

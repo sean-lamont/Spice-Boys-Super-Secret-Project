@@ -11,7 +11,7 @@
  *	- Textbox overlay (text info)
  */
 import SuburbData from '../data/SuburbCodes.js'
-import getAllSuburbs from '../helpers/Query.js'
+import {getAllSuburbs, getSuburb} from '../helpers/Query.js'
 
 function check_valid_place(place) {
 
@@ -29,7 +29,12 @@ function check_valid_place(place) {
 }
 
 /* fields form single suburb */
-function singleSuburb(suburb, fields) {}
+function singleSuburb(suburb, fields) {
+	getSuburb({"match": {"suburb": suburb[0]}}, 
+				(data) => {
+					query2map(data)
+				});
+}
 /* fields from multiple suburbs*/
 function multiSuburb(suburbs, fields) {}
 /* Aggregate data for canberra overview */
@@ -165,12 +170,8 @@ export default function query_transform(wit_obj, map_callback) {
 		const stat_name = stats[0].value.toLowerCase();
 		getAllSuburbs(function(data) {
 			console.log(data);
-			var allSuburbs = {};
-			for (var key in data) {
-				allSuburbs[key.toUpperCase()] = data[key][stat_name.replace(/ /g, "_")];
-				console.log(key + ": "+ data[key][stat_name.replace(/ /g, "_")]);
-			}
-			map_callback(allSuburbs);
+			
+			map_callback(query2map(data, stat_name));
 			//for
 			//stats.value
             //map_callback(data);
@@ -184,3 +185,12 @@ export default function query_transform(wit_obj, map_callback) {
 	console.log("Invalid query - does not match any structures");
 	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
 }
+
+// converts query dictionary to map dictionary
+function query2map(data, stat_name){
+	var allSuburbs = {};
+	for (var suburb in data) {
+		let field = stat_name.replace(/ /g, "_");
+		allSuburbs[suburb.toUpperCase()] = data[suburb][field];
+	}
+} 
