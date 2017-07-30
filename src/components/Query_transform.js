@@ -168,12 +168,8 @@ export default function query_transform(wit_obj, map_callback) {
 		const stat_name = stats[0].value.toLowerCase();
 		getAllSuburbs(function(data) {
 			console.log(data);
-			var allSuburbs = {};
-			for (var key in data) {
-				allSuburbs[key.toUpperCase()] = data[key][stat_name.replace(/ /g, "_")];
-				console.log(key + ": "+ data[key][stat_name.replace(/ /g, "_")]);
-			}
-			map_callback(allSuburbs);
+			
+			map_callback(query2map(data));
 			//for
 			//stats.value
             //map_callback(data);
@@ -187,3 +183,12 @@ export default function query_transform(wit_obj, map_callback) {
 	console.log("Invalid query - does not match any structures");
 	return "I'm sorry, I didn't understand that. You can look for certain statistics or an overview for each suburb. Use 'help' for more information.";
 }
+
+// converts query dictionary to map dictionary
+function query2map(data){
+	var allSuburbs = {};
+	for (var suburb in data) {
+		let field = stat_name.replace(/ /g, "_");
+		allSuburbs[suburb.toUpperCase()] = data[suburb][field];
+	}
+} 
