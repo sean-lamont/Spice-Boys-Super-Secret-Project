@@ -89,7 +89,7 @@ export default function query_transform(wit_obj) {
 	else if (suburb !== "" && stats === "population") {	
 		/* Query = find population of $place */
 		
-		console.log("Finding population in "+ place);
+		console.log("Finding population in "+ suburb);
 		return;		
 	}
 
