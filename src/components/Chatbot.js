@@ -63,6 +63,9 @@ class Chatbot extends Component {
       .then((json) => {
         console.log(this.state.message);
         console.log(json);
+
+        this.props.responded(json);
+
       }).catch(error => console.log(error));
   }
 
