@@ -35,8 +35,8 @@ function getSuburb(constraint, count = 10){
 */
 
 function getSuburbSorted(constraint, sort_terms, count = 10){
-  data_name = 'suburb-detail'
-  query = {
+  let data_name = 'suburb-detail'
+  let query = {
     "size" : count,
     "sort" : sort_terms,
     "query": {
