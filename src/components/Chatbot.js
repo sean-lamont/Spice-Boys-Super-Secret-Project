@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Message from './Message';
+import query_transform from './Query_transform';
 
 class Chatbot extends Component {
   constructor (props) {
@@ -44,7 +45,7 @@ class Chatbot extends Component {
     query.push(e.target.value.trim());
     e.target.value = '';
     this.setState({ query }, function() {
-      this.search();
+      var search_res = this.search();
     });
 	}
 
@@ -56,6 +57,8 @@ class Chatbot extends Component {
       .then((json) => {
         console.log(this.state.query);
         console.log(json);
+      /* Turn the wit output into usable json query */
+	query_transform(json);
       }).catch(error => console.log(error));
   }
 }
