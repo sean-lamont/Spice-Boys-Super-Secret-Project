@@ -67,7 +67,7 @@ class Chatbot extends Component {
       .then((json) => {
         console.log(this.state.message);
         console.log(json);
-        this.botResponse(query_transform(json, this.props.responded));
+        query_transform(json, this.props.responded, this.botResponse.bind(this));
       }).catch(error => console.log(error));
   }
 
@@ -84,7 +84,7 @@ class Chatbot extends Component {
   }
 
   printHelp() {
-  	const helptext = "Sorry, I don't quite know how to answer your question! Feel free to ask me about stats, transport, jobs, education, recreation, crime, population or livability though!";
+  	const helptext = "Sorry, I don't quite know how to answer your question! Ask me to show stats, transport, jobs, education, recreation, crime, population or livability though!";
 	this.botResponse(helptext);
   }
 
