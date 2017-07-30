@@ -67,7 +67,7 @@ class Chatbot extends Component {
       .then((json) => {
         console.log(this.state.message);
         console.log(json);
-        this.botResponse(query_transform(json, this.props.responded));
+        query_transform(json, this.props.responded, this.botResponse.bind(this));
       }).catch(error => console.log(error));
   }
 

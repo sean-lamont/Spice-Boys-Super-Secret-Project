@@ -28,11 +28,21 @@ function check_valid_place(place) {
 	return "";
 }
 
+function displayData(data, suburb, fields) {
+
+	console.log(data);
+	console.log(fields);
+	console.log(data[suburb]);
+	console.log(data[suburb][fields]);
+	return""+suburb+" "+fields+": "+ data[suburb][fields.toLowerCase()];
+}
+
 /* fields form single suburb */
-function singleSuburb(suburb, fields) {
+function singleSuburb(suburb, fields, print_callback) {
 	getSuburb({"match": {"suburb": suburb[0]}},
 				(data) => {
-					query2map(data)
+					query2map(data, fields);
+					print_callback(displayData(data, suburb[0], fields));
 				});
 }
 /* fields from multiple suburbs*/
@@ -41,8 +51,10 @@ function multiSuburb(suburbs, fields) {}
 function totalSuburb(fields) {}
 
 
+var chatbot_response_context;
+
 /* Work out the DB query */
-export default function query_transform(wit_obj, map_callback) {
+export default function query_transform(wit_obj, map_callback, bot_print) {
 	/*
 	 * Possible wit object fields:
 	 *	- statistics
@@ -51,6 +63,7 @@ export default function query_transform(wit_obj, map_callback) {
 	*/
 	var stats, suburb, place, prox, valid, graph;
 	var data;
+	chatbot_response_context = bot_print;
 
 	if (!wit_obj) {
 		console.log("Invalid query - Null object");
@@ -130,18 +143,23 @@ export default function query_transform(wit_obj, map_callback) {
 			sub_list[i] = suburb[i].value;
 
 		if (sub_len > 1) {
+			var str = "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
+			bot_print(str);
 			data = multiSuburb(sub_list, field_list);
-
-			return "Here's the information about "+field_list+" in the following suburbs; "+sub_list;
+			return;
 		}
 		else {
 			if (suburb[0].value === "Canberra") {
 				data = totalSuburb(field_list);
-				return "Here's the information about "+field_list+" in Canberra";
+				var str = "Here's the information about "+field_list+" in Canberra";
+				bot_print(str);
+				return;
 			}
 			else {
-				data = singleSuburb(sub_list, field_list);
-				return "Here's the information about "+field_list+" in "+suburb[0].value;
+				data = singleSuburb(sub_list, field_list, bot_print);
+				var str = "Here's the information about "+field_list+" in "+suburb[0].value;
+				bot_print(str);
+				return;
 			}
 		}
 
@@ -156,11 +174,15 @@ export default function query_transform(wit_obj, map_callback) {
 
 		if (suburb_vals.length > 1) {
 			data = multiSuburb(suburb_vals, []);
-			return "Here is an overview for the following suburbs: "+suburb_vals;
+			var str = "Here is an overview for the following suburbs: "+suburb_vals;
+			bot_print(str);
+			return;
 		}
 		else {
-			data = singleSuburb(suburb_vals, []);
-			return "Here is an overview for "+suburb_vals;
+			data = singleSuburb(suburb_vals, [], bot_print);
+			var str = "Here is an overview for "+suburb_vals;
+			bot_print(str);
+			return;
 		}
 
 	}
@@ -188,7 +210,7 @@ export default function query_transform(wit_obj, map_callback) {
         return "I will display the " + stat_name + " data.";
 	}
 
-
+	bot_print("Testing");
 
 	/*  transport, jobs, education, recreation, crime, population, livability */
 	console.log("Invalid query - does not match any structures");
