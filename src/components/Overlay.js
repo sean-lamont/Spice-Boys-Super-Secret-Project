@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {setParameters} from 'luma.gl';
 import DeckGL, {GeoJsonLayer} from 'deck.gl';
+import { Map, fromJS } from 'immutable';
+
 
 const LIGHT_SETTINGS = {
     lightsPosition: [-125, 50.5, 5000, -122.8, 48.5, 8000],
@@ -22,11 +24,16 @@ export default class Overlay extends Component {
 
     getHeight(name) {
         const heights = this.props.heights;
-        console.log(heights);
-        if (heights && heights.indexOf(name) !== -1) {
-            return this.heights[name];
+        if (heights) {
+            console.log(heights[name]);
+            return heights[name];
         }
-        return 0;
+        return 1;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        //console.log("here");
+        this.forceUpdate();
     }
 
     render() {
@@ -36,25 +43,34 @@ export default class Overlay extends Component {
             return null;
         }
 
-        var layer = new GeoJsonLayer({
+        const newdata = JSON.parse(JSON.stringify(data));
+        //console.log(this.props.heights);
+        const heights = fromJS(this.props.heights);
+
+        const lambda = f => this.getHeight(f.properties.division_name);
+
+        const layer = new GeoJsonLayer({
             id: 'geojson',
-            data,
+            data: newdata,
             opacity: 0.8,
             stroked: false,
             filled: true,
             extruded: true,
             wireframe: true,
             fp64: true,
-            getElevation: f => this.props.heights ? this.props.heights[f.properties.division_name] : 1,
-            getFillColor: f => colorScale(f.properties.division_name.length/10),
+            getElevation: f => this.getHeight(f.properties.division_name),
+            getFillColor: f => colorScale(this.getHeight(f.properties.division_name)/1000),
             getLineColor: f => [255, 255, 255],
             lightSettings: LIGHT_SETTINGS,
             pickable: Boolean(this.props.onHover),
-            onHover: this.props.onHover
+            onHover: this.props.onHover,
+            updateTriggers: {
+                getElevation: heights
+            }
         });
 
         return (
-            <DeckGL {...viewport}  layers={ [layer] } onWebGLInitialized={this._initialize} />
+            <DeckGL {...viewport} layers={ [layer] } onWebGLInitialized={this._initialize} />
         );
     }
 }

@@ -6,13 +6,13 @@ import Overlay from './Overlay.js';
 //import { getSuburbName } from '../geojson.js';
 //import Dimensions from 'react-dimensions'
 
-import {json as requestJson} from 'd3-request';
+//import {json as requestJson} from 'd3-request';
 
 // Set your mapbox token here
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiYWNlb2ZzcGllcyIsImEiOiJjajVvaDg0d2Q0MXJhMnFvODUzNjQ3MmZ5In0.xLzbJqDG59zkyw2CKEXaow'; // eslint-disable-line
 
 // Source data GeoJSON
-const DATA_URL = 'https://raw.githubusercontent.com/Spice-Boys/Spice-Boys-Super-Secret-Project/master/public/datasets/ACT%20Division%20Boundaries.geojson'; // eslint-disable-line
+//const DATA_URL = 'https://raw.githubusercontent.com/Spice-Boys/Spice-Boys-Super-Secret-Project/master/public/datasets/ACT%20Division%20Boundaries.geojson'; // eslint-disable-line
 
 const colorScale = r => [140, r * 255, 200 * (1 - r)];
 
@@ -53,22 +53,31 @@ class Map extends Component {
         this.setState({colours: colours});
     }
 
+    zoomIntoSuburb(suburb) {
+
+    }
+
     getSuburbName(suburb) {
         return suburb.properties.division_name;
     }
 
-    setHeightsByName() {
+    setHeightsByName(defaultn) {
         var heights = {};
-        var suburbs = this.state.suburbs['features'];
+        var suburbs = this.state.data['features'];
         for(var i=0; i<suburbs.length; i++) {
             var name = this.getSuburbName(suburbs[i]);
-            heights[name] = name.length * 100;
+            if (defaultn) {
+                heights[name] = defaultn;
+            } else {
+                heights[name] = name.length * 100;
+            }
         }
         this.setHeights(heights);
         //console.log(heights);
+        if(defaultn) {
+            this.setGeoJSON({});
+        }
     }
-
-
 
 
 
@@ -86,14 +95,6 @@ class Map extends Component {
         window.addEventListener('resize', this._resize.bind(this));
         this._resize();
 
-        requestJson(DATA_URL, (error, response) => {
-            if (!error) {
-                this.setState({suburbs: response});
-                this.setHeightsByName();
-                this.showAllSuburbs();
-            }
-        });
-
     }
 
     _resize() {
@@ -110,9 +111,11 @@ class Map extends Component {
     }
 
     render() {
-        const {viewport, data, heights, colours} = this.state;
-        console.log("xxx");
-        console.log(data);
+        //this.setHeightsByName();
+        //this.showAllSuburbs();
+        const {viewport, colours} = this.state;
+        const data= this.props.data;
+        const heights = this.props.heights;
         console.log(heights);
         const overlay = <Overlay viewport={viewport}
                                  data={data}
