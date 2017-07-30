@@ -96,8 +96,7 @@ export default function query_transform(wit_obj, map_callback) {
 	console.log(JSON.stringify(stats));
 
 	if (suburb != null && (stats != null || place != null)) {
-		alert("1");
-		
+
 		var sub_len = suburb.length;
 		var sub_list = [];
 	        var stat_len;
@@ -145,7 +144,6 @@ export default function query_transform(wit_obj, map_callback) {
 
 	/* if we have a suburb name but no stats, display all info about suburb */
 	else if (suburb != null) {
-        alert("2");
 		var suburb_vals = [];
 			
 		for (var i = 0; i < suburb.length; i++)
@@ -164,12 +162,20 @@ export default function query_transform(wit_obj, map_callback) {
 
 	else if (stats != null && graph != null) {
 		var data = {};
-		alert(stats)
+		const stat_name = stats[0].value.toLowerCase();
 		getAllSuburbs(function(data) {
 			console.log(data);
+			var allSuburbs = {};
+			for (var key in data) {
+				allSuburbs[key.toUpperCase()] = data[key][stat_name.replace(/ /g, "_")];
+				console.log(key + ": "+ data[key][stat_name.replace(/ /g, "_")]);
+			}
+			map_callback(allSuburbs);
+			//for
+			//stats.value
             //map_callback(data);
 		});
-        return "I will display the " + stats[0].value + " data.";
+        return "I will display the " + stat_name + " data.";
 	}
 
 

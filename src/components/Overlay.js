@@ -25,7 +25,7 @@ export default class Overlay extends Component {
     getHeight(name) {
         const heights = this.props.heights;
         if (heights) {
-            console.log(heights[name]);
+            console.log("showing "+name + ": " + heights[name]);
             return heights[name];
         }
         return 1;
@@ -46,8 +46,6 @@ export default class Overlay extends Component {
         const newdata = JSON.parse(JSON.stringify(data));
         //console.log(this.props.heights);
         const heights = fromJS(this.props.heights);
-
-        const lambda = f => this.getHeight(f.properties.division_name);
 
         const layer = new GeoJsonLayer({
             id: 'geojson',

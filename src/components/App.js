@@ -25,7 +25,7 @@ class App extends Component {
         var suburbs = this.state.data['features'];
         for(var i=0; i<suburbs.length; i++) {
             var name = this.getSuburbName(suburbs[i]);
-                heights[name] = name.length * 100;
+                heights[name.toUpperCase()] = json[name.toUpperCase()];
         }
         this.setState({heights: heights});
 

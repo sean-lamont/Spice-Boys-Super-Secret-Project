@@ -61,25 +61,6 @@ class Map extends Component {
         return suburb.properties.division_name;
     }
 
-    setHeightsByName(defaultn) {
-        var heights = {};
-        var suburbs = this.state.data['features'];
-        for(var i=0; i<suburbs.length; i++) {
-            var name = this.getSuburbName(suburbs[i]);
-            if (defaultn) {
-                heights[name] = defaultn;
-            } else {
-                heights[name] = name.length * 100;
-            }
-        }
-        this.setHeights(heights);
-        //console.log(heights);
-        if(defaultn) {
-            this.setGeoJSON({});
-        }
-    }
-
-
 
     constructor(props) {
         super(props);
@@ -111,7 +92,6 @@ class Map extends Component {
     }
 
     render() {
-        //this.setHeightsByName();
         //this.showAllSuburbs();
         const {viewport, colours} = this.state;
         const data= this.props.data;
